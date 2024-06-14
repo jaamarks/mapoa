@@ -104,19 +104,5 @@ def process_data(
 
     print(f"\nSuccessfully processed {args.input_file} and wrote to {args.output_file}")
 
-#def main():
-#    """Main function to parse arguments and call the processing function."""
-#    args = parse_arguments()
-#    data = process_data(
-#                         infile=args.input_file,
-#                         chrom=args.chrom,
-#                         outfile=args.output_file,
-#                         variant=args.variant,
-#                         sep=args.sep
-#                        )
-#    print(f"\nSuccessfully processed {args.input_file} and wrote to {args.output_file}")
-
-
 if __name__ == "__main__":
     app()
-
