@@ -1,3 +1,5 @@
+import typer
+from pathlib import Path
 import argparse
 import pandas as pd
 import re
@@ -5,30 +7,43 @@ import numpy as np
 
 # need to add Type
 
-def parse_arguments():
-    parser = argparse.ArgumentParser(description="Process sumstats by creating a variant and rsID column.")
-    parser.add_argument("--input-file", "-i", dest="input_file", type=str, help="Path to the input file")
-    parser.add_argument("--output-file", "-o", dest="output_file", type=str, help="Path to the output file")
-    parser.add_argument("--chrom", dest="chrom", type=str, help="Name of the column containing the chromosome information.")
-    parser.add_argument("--variant", dest="variant", type=str, help="Name of the column containing the variant ID (e.g., rs544698705:672940:G:C)  information.")
-    parser.add_argument("--sep", dest="sep", type=str, default="\t", help="Delimiter.")
+app = typer.Typer()
 
-    return parser.parse_args()
+@app.command()
+def process_data(
+    infile: Path,
+    outfile: Path,
+    chrom: str = "CHROM",
+    variant: str = "ID",
+    sep: str = r"\t"
+) -> Path:
+    """Transform GENOA GWAS sumstats to GWAS-SSF-v1.0 format
 
-def process_data(infile, chrom, variant, outfile, sep="\t"):
+    This tool was designed specifically for the sumstats that went into
+
+    the GENOA GWAS meta-analysis. It expects the input file to be
+
+    formatted in a particular way. In particular, the tool expects
+
+    certain column names and variant ID patterns:
+
+    * rs544698705:672940:G:C
+
+    * 1:768116:A:AGTTTT
+
+    * 1:766600:<CN0>:G
+
+    * 1:3011887:<INS:ME:ALU>:A
+
+    It creates the required and recommended columns for GWAS-SSF v1.0
+
+    and arranges them in the expected order. Validate the output using
+
+    the GWAS SumStats tools:
+
+    https://github.com/EBISPOT/gwas-sumstats-tools
     """
-    Process sumstats by creating a variant and rsID column.
 
-    Args:
-        data (tsv file): The file containing the sumstats data.
-        chrom (str): The original name of the chromosome column.
-        variant (str): The original name of the variant column.
-        outfile (str): The name of the output file to save processed sumstats.
-        sep (char): The delimeter (default "\t")
-
-    Returns:
-        pd.DataFrame: The processed DataFrame with the chromosome column renamed and repositioned.
-    """
 
     df = pd.read_csv(infile, sep=sep)
 
@@ -87,17 +102,21 @@ def process_data(infile, chrom, variant, outfile, sep="\t"):
     # Save the DataFrame to a TSV file
     df.to_csv(outfile, sep='\t', index=False)
 
-def main():
-    """Main function to parse arguments and call the processing function."""
-    args = parse_arguments()
-    data = process_data(
-                         infile=args.input_file,
-                         chrom=args.chrom,
-                         outfile=args.output_file,
-                         variant=args.variant,
-                         sep=args.sep
-                        )
     print(f"\nSuccessfully processed {args.input_file} and wrote to {args.output_file}")
 
+#def main():
+#    """Main function to parse arguments and call the processing function."""
+#    args = parse_arguments()
+#    data = process_data(
+#                         infile=args.input_file,
+#                         chrom=args.chrom,
+#                         outfile=args.output_file,
+#                         variant=args.variant,
+#                         sep=args.sep
+#                        )
+#    print(f"\nSuccessfully processed {args.input_file} and wrote to {args.output_file}")
+
+
 if __name__ == "__main__":
-  main()
+    app()
+
