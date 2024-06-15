@@ -1,21 +1,19 @@
 import typer
 from pathlib import Path
-import argparse
 import pandas as pd
-import re
 import numpy as np
-
-# need to add Type
+import re
+from typing_extensions import Annotated
 
 app = typer.Typer()
 
+typer.Argument
 @app.command()
 def process_data(
-    infile: Path,
-    outfile: Path,
+    infile: Annotated[Path, typer.Argument(help = "Input sumstats file path")],
+    outfile: Annotated[Path, typer.Argument(help = "Output GWAS-SSF formatted file path")],
     chrom: str = "CHROM",
     variant: str = "ID",
-    sep: str = r"\t"
 ) -> Path:
     """Transform GENOA GWAS sumstats to GWAS-SSF-v1.0 format
 
@@ -44,8 +42,7 @@ def process_data(
     https://github.com/EBISPOT/gwas-sumstats-tools
     """
 
-
-    df = pd.read_csv(infile, sep=sep)
+    df = pd.read_csv(infile, sep='\t')
 
     # Define the function to split the string using the regular expression
     def _split_variant_id(variant):
@@ -70,7 +67,7 @@ def process_data(
     df['ref_allele'] = np.where(df['1kg_ref'] == df['ALT'], 'EA', 'OA')
 
     # remove unecessary columns for gwas-ssf-v1.0
-    columns_to_drop = ['ID', 'MAF' 'INFORMATIVE_ALT_AC', 'CALL_RATE', 'HWE_PVALUE', 'N_REF', 'N_HET', 'N_ALT', 'U_STAT', 'SQRT_V_STAT', '1kg_ref', '1kg_alt', 'pos', 'UNKOWN', 'POP_MAF', 'SOURCE', 'IMP_QUAL']
+    columns_to_drop = ['ID', 'MAF', 'INFORMATIVE_ALT_AC', 'CALL_RATE', 'HWE_PVALUE', 'N_REF', 'N_HET', 'N_ALT', 'U_STAT', 'SQRT_V_STAT', '1kg_ref', '1kg_alt', 'pos', 'UNKOWN', 'POP_MAF', 'SOURCE', 'IMP_QUAL']
 
     # Check if each column exists before dropping it
     columns_to_drop_existing = [col for col in columns_to_drop if col in df.columns]
@@ -102,7 +99,12 @@ def process_data(
     # Save the DataFrame to a TSV file
     df.to_csv(outfile, sep='\t', index=False)
 
-    print(f"\nSuccessfully processed {args.input_file} and wrote to {args.output_file}")
+    RESET = "\033[0m"
+    RED ="\033[31m"
+    UNDERLINE = "\033[4m"
+    inf = f"{UNDERLINE}{RED}{infile}{RESET}"
+    outf = f"{UNDERLINE}{RED}{outfile}{RESET}"
+    print(f"\nSuccessfully processed {inf} and wrote to {outf}")
 
 if __name__ == "__main__":
     app()
