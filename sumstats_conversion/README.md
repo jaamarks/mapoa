@@ -1,4 +1,4 @@
-## GWAS Summary Statistics Conversion Script
+# GWAS Summary Statistics Conversion Script
 
 This script converts GWAS summary statistics (sumstats) data to the GWAS Summary Statistic Standard (GWAS-SSF) format for upload to the [IOmics mapOA](https://staging.iomics-mapoa.org/) website.
 
@@ -33,6 +33,9 @@ Our custom script addresses these challenges by:
 
 * Ensures consistent GWAS-SSF compliance for uploading data to IOmics mapOA.
 * Enhances data sharing and analysis opportunities.
+
+## Usage
+<p align="center"><img src="gwas_conversion_demo.gif"/></p>
 
 ---
   <br><br>
