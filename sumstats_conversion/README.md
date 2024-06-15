@@ -33,3 +33,15 @@ Our custom script addresses these challenges by:
 
 * Ensures consistent GWAS-SSF compliance for uploading data to IOmics mapOA.
 * Enhances data sharing and analysis opportunities.
+
+---
+  <br><br>
+
+# Cohort Information
+
+A comprehensive Excel spreadsheet containing information about the GENOA meta-analysis cohorts intended for upload is available on the Microsoft Teams `IOMICS-OA P50: RTI only` team.
+This spreadsheet details cohort data locations, metadata, and information needed to adhere to the GWAS-SSF v1.0.0 standard.
+
+**Access the spreadsheet here:**
+
+[20240603_GENOA_GWAS_Meta_Analyses_Cohorts_Data_Processing_Metadata_GWAS-SSF_v1.0.0.xlsx](https://researchtriangleinstitute.sharepoint.com/:x:/r/sites/ICANP50RTIonly/Shared%20Documents/General/mapOA/Data/GWAS/20240603_GENOA_GWAS_Meta_Analyses_Cohorts_Data_Processing_Metadata_GWAS-SSF_v1.0.0.xlsx?)
