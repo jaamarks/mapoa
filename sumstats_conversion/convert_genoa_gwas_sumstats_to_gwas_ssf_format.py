@@ -45,6 +45,8 @@ def main(
 
     # apply formatting steps
     df = split_expand(df, variant)
+    if not keep_indels:
+        df = remove_indels(df)
     df = non_rs(df, chrom)
     df = ref_allele(df)
     df = remove_extra(df)
@@ -73,6 +75,12 @@ def split_expand(df, variant):
         print("Error occurred while splitting the values. The line that caused the error:")
         print(e)
         #print(df[df[variant].str.count(':') != 3])
+
+def remove_indels(df):
+    # remove any line which contains indels
+    mask = df.apply(lambda x: x.astype(str).str.contains('<|>', regex=True)).any(axis=1)
+    filtered_df = df[~mask]
+    return filtered_df
 
 # Set non-'rs' entries to '#NA'
 def non_rs(df, chrom):
