@@ -1,0 +1,10 @@
+name: mapoa_cli
+
+channels:
+  - conda-forge  # Replace with your preferred channel if needed
+
+dependencies:
+  - python
+  - typer
+  - ckanapi
+  - python-dotenv  # For environment variable handling
