@@ -1,6 +1,6 @@
 # mapOA CLI
 This handy CLI enables you to easily interact with data on the [mapOA](https://staging.iomics-mapoa.org/) website.
-We picked some of the most useful commands from the `ckanapi` Python module, which allows your to call anything listed in the [CKAN Action API](https://docs.ckan.org/en/latest/api/index.html#action-api-reference), and used [Typer](https://github.com/tiangolo/typer) to create a user-friendly interface. 
+We picked some of the most useful commands from the `ckanapi` Python module, which allows you to call anything listed in the [CKAN Action API](https://docs.ckan.org/en/latest/api/index.html#action-api-reference), and used [Typer](https://github.com/tiangolo/typer) to create a user-friendly interface. 
 The goal was to simplify retrieving information—like datasets (AKA packages in CKAN)—from mapOA.
 
 **Forked from:** `https://github.com/RTIInternational/mapMECFS-API/blob/main/python/mapMECFS-API.py`
