@@ -1,0 +1,51 @@
+---
+# Study meta-data
+analysis_name: UHS1-2-3
+author_notes: Summary statistics of a GWAS.
+date_metadata_last_modified: 2024-07-05
+
+# Trait Information
+trait_description: OAall, Opioid Addiction cases (defined by DSM) vs all controls
+
+# Genotyping Information
+genome_assembly: GRCh37
+coordinate_system: 1-based
+genotyping_technology: Genome-wide genotyping array
+imputation_panel: 1000 Genomes Phase 3 v5
+imputation_software: Michigan Imputation Server (Minimac4)
+
+# Sample Information
+samples:
+  - sample_ancestry_category:
+      - African
+    sample_ancestry:
+      - African-American
+    sample_size: 5536
+    case_control_study: true
+    case_count: 1311
+    control_count: 4225
+    case_type: FOU
+    control_count: Public
+    ancestry_method:
+      - genetically determined
+sex: combined
+
+# Summary Statistic information
+data_file_name: uhs1-2-3.aa.oaall.genome_wide.gwas_ssf.tsv.gz
+file_type: GWAS-SSF v1.0.0
+data_file_md5sum: cee850cafae3746abe8e2065882fb9dd
+analysis_software: RVTESTS 20171009
+adjusted_covariates:
+  - sex
+  - age
+  - PC1
+  - PC3
+  - PC4
+  - PC5
+  - PC8
+minor_allele_freq_lower_limit: 0.01
+rsq_lower_limit: 0.30
+
+# Harmonization status
+is_harmonised: false
+is_sorted: true
