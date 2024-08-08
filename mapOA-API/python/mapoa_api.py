@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from typing import Optional
 from typing_extensions import Annotated
-from mapoa_api_utils import yaml_to_json, check_dataset_required_fields
+from mapoa_api_utils import yaml_to_json, check_dataset_required_fields, upload_resource_with_suffix
 
 
 app = typer.Typer()
@@ -46,7 +46,7 @@ def list_datasets(
             typer.echo(styled_name)
 
 
-@app.command()
+#@app.command()
 def list_datasets_with_resources():
     """
     Lists all datasets along with their metadata and resources.
@@ -92,7 +92,7 @@ def search_datasets(query: str):
 
 
 @app.command()
-def create_package(dataset: Annotated[Path, typer.Argument(help="JSON file containing required parameters. See `templates/template_package.json`.")]):
+def create_dataset(dataset: Annotated[Path, typer.Argument(help="JSON file containing required parameters. See `templates/template_package.json`.")]):
     """
     Create a new dataset (package).
 
@@ -102,10 +102,18 @@ def create_package(dataset: Annotated[Path, typer.Argument(help="JSON file conta
     https://docs.ckan.org/en/latest/api/index.html#ckan.logic.action.create.package_create
     """
 
-    with open(dataset, 'r') as f:
-        data_dict = json.load(f)
+    try:
+        with open(dataset, 'r') as f:
+            data = json.load(f)
+    except json.JSONDecodeError as e:
+        print(f"Failed to decode JSON '{dataset}'")
+        print(f"Error message: {e}")
+        print(f"Please verify the format of your input file. You can use this online formatter to help: https://jsonformatter.curiousconcept.com/#")
+        return None
 
-    dataset = check_dataset_required_fields(data_dict)
+    dataset = check_dataset_required_fields(data)
+
+
     if dataset is None:  # Check for None returned by inner function
         return  # Ex
 
@@ -113,16 +121,14 @@ def create_package(dataset: Annotated[Path, typer.Argument(help="JSON file conta
         mapoa.call_action("package_create", dataset)
         pass
     except ValidationError as e:
-        #typer.echo("ValidationError attributes and methods:")
-        #typer.echo(dir(e))
         if 'name' in e.error_dict and 'That URL is already in use.' in e.error_dict['name']:
-            typer.echo("This package name already exists.")
+            typer.echo(f"This dataset name already exists.")
             return
         else:
             typer.echo(f"Validation error: {e}")
             return
 
-    message = f"Success! Created package '{dataset["name"]}'\n"
+    message = f"Success! Created dataset: '{dataset["name"]}'\n"
     typer.echo(message)
     pprint.pprint(dataset)
 
@@ -158,12 +164,11 @@ def upload_resources(
     with open(required_fields, 'r') as file1, open(sumstats, 'r') as file2, open(metadata, 'r') as file3:
         data_dict = json.load(file1)
         metadata_resource.update(data_dict)
-        #print(metadata_resource)
 
-        mapoa.call_action("resource_create", metadata_resource, files={"upload": file2})
-        mapoa.call_action("resource_create", metadata_resource, files={"upload": file3})
+        # same metadata except change name to differentiate the two
+        upload_resource_with_suffix(mapoa, metadata_resource, ": Sumstats", file2)
+        upload_resource_with_suffix(mapoa, metadata_resource, ": Metadata", file3)
 
-        # same metadata for both uploads
         styled_sumstats = typer.style(sumstats, fg=typer.colors.GREEN)
         styled_metadata = typer.style(metadata, fg=typer.colors.GREEN)
         message = f"\nUploaded resources:\n- {styled_sumstats}\n- {styled_metadata}."

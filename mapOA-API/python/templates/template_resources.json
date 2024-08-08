@@ -1,6 +1,5 @@
 {
-    "title": "API Test: Upload Resource 8-03",
-    "package_id": "test-803",
-    "name": "resource-api-test-803",
-    "resource_file_type": "Results File"
+    "name": "GWAS SSF Formatted Files",
+    "description": "This is a description of the resource.",
+    "package_id": "api-test-808"
 }

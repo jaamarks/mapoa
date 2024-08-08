@@ -1,0 +1,8 @@
+{
+    "title": "My GWAS Dataset: Test808 🦊",
+    "name": "api-test-808",
+    "notes" : "GWAS Dataset that contains AA-ancestry results.",
+    "owner_org": "jaamarks-org",
+    "analysisType": "primary",
+    "private": true
+}

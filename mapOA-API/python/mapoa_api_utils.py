@@ -49,10 +49,23 @@ def yaml_to_json(yaml_file: Path):
 
 
 def check_dataset_required_fields(data):
-    required_fields = ["name", "maintainer", "maintainer_email"]
+    required_fields = ["name", "analysisType", "title", "notes", "owner_org", "private"]
     missing_fields = [field for field in required_fields if field not in data]
     if missing_fields:
         print(f"Missing required fields: {', '.join(missing_fields)}")
         return None
+
+    if data["private"] is not True:
+        print(f'The "private" value must be lowercase true or false and not in quotes.')
+
     else:
         return data
+
+def upload_resource_with_suffix(remote_ckan, metadata, name_suffix, file):
+    """
+    Appends ': Sumstats' or ': Metadata' to the original 'name' value to distinguish between the Sumstats and Metadata files.
+    Then uploads the resources via the API.
+    """
+    new_metadata = metadata.copy()  # Create a copy to avoid modifying original
+    new_metadata["name"] += name_suffix
+    remote_ckan.call_action("resource_create", new_metadata, files={"upload": file})
